@@ -1,0 +1,6 @@
+*.jar
+*.class
+*.rar
+/target
+/test
+.*
