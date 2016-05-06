@@ -40,47 +40,34 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 
 public class SampleBlazegraphBlueprintsEmbedded {
-	
-	protected static final Logger log = Logger.getLogger(SampleBlazegraphBlueprintsEmbedded.class);
-	private static final String journalFile = "/tmp/testJournal-" + System.currentTimeMillis()
-			+ ".jnl";
-	
-	public static void main(String[] args) throws Exception {
-		
-			final File f = new File(journalFile);				
-			
-			//Make sure were starting with a clean file.
-			f.delete();
 
-			final BigdataGraph g = BigdataGraphFactory.create(journalFile);
-			
-			final InputStream is = SampleBlazegraphBlueprintsEmbedded.class
-					.getClassLoader().getResourceAsStream("graph-example-1.xml");//从classpath根下取资源
-			try {
-				
-				GraphMLReader.inputGraph(g, is);
-				
-			} finally {
-				is.close();
+	protected static final Logger log = Logger.getLogger(SampleBlazegraphBlueprintsEmbedded.class);
+	private static final String journalFile = "/tmp/testJournal-" + System.currentTimeMillis() + ".jnl";
+
+	public static void main(String[] args) throws Exception {
+
+		final File f = new File(journalFile);
+		// Make sure were starting with a clean file.
+		f.delete();
+		
+		final BigdataGraph g = BigdataGraphFactory.create(journalFile);
+		final InputStream is = SampleBlazegraphBlueprintsEmbedded.class.getClassLoader()
+				.getResourceAsStream("graph-example-1.xml");// 从classpath根下取资源
+		try {
+			GraphMLReader.inputGraph(g, is);
+		} finally {
+			is.close();
+		}
+		try {
+			for (final Vertex v : g.getVertices()) {
+				log.info(v);
 			}
-			
-			try {
-	
-				for (final Vertex v : g.getVertices()) {
-					log.info(v);
-				}
-				for (final Edge e : g.getEdges()) {
-					log.info(e);
-				}
-				
-			} finally  {
-				
-				g.shutdown();	
-				
-				f.delete();
-				
+			for (final Edge e : g.getEdges()) {
+				log.info(e);
 			}
-			
+		} finally {
+			g.shutdown();
+			f.delete();
+		}
 	}
-	
 }
